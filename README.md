@@ -18,7 +18,7 @@ Using github in a situation where you're the only contributor is a good deal eas
 
 ### Creating a New Git Repo
 
-We use the command `git init` to initialize a new git repository
+We use the command `git init` to initialize a new git repository.
 
 ## Github with Friends
 
