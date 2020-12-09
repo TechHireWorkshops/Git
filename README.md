@@ -10,11 +10,25 @@ Github is a code-hosting platform where coding projects can be stored, edited, a
 
 Git exists on your computer separate from GitHub.  It's a way of locally saving the series of changes that a project undergoes as it develops.  What GitHub is, is a place to save your local project git to the cloud.  This allows it to be safely backed up, and shared between collaborators.
 
+## How does it work?
+
+![](https://wac-cdn.atlassian.com/dam/jcr:0c5257d5-ff01-4014-af12-faf2aec53cc3/01.svg?cdnVersion=1359)
+
+Git organizes our project into 3 'trees:' the working directory, where we have our unsaved (by git) work, our index, or saved (committed) work, and our commit history.  Our commit history looks like this:
+
+![](https://wac-cdn.atlassian.com/dam/jcr:5db5291a-98ea-4ebc-bb99-a40dd23eaf62/git-sequence-transparent.png?cdnVersion=1359)
+
+It's the series of commits that make up the project. Run those changes on an empty directory in order and you have your project. The HEAD of the project points to the most recent commit.
+
+To truly understand how git works, take a look at the free guidebook [*Pro Git*](https://git-scm.com/book/en/v2).
+
+For detailed information about the options and flag about git commands, have a look at the [reference documents](https://git-scm.com/docs).
+
 ## Github Alone
 
 ![](https://images.theconversation.com/files/352433/original/file-20200812-18-1ef252z.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=754&fit=clip)
 
-Using GitHub in a situation where you're the only contributor is a good deal easier than in a group, and you're likely already familiar with using GitHub with your own projects.  Let's quickly look over the basics of how git works.
+Using GitHub in a situation where you're the only contributor is a good deal easier than in a group, and you're likely already familiar with using GitHub with your own projects.  Let's quickly look over the basics of how creating a git/GitHub project.
 
 ![](https://miro.medium.com/max/2000/1*P_aDIW0R4CV3UepAokOCYQ.jpeg)
 
@@ -84,7 +98,7 @@ We then run
 	
 This created an 'anti-commit' that undoes all of the changes after that point, which we can then push up to undo our earlier saves.
 
-This is different from `git reset` which deletes commits from a certain point forward.  For anything that has been pushed up to a public branch, `git revert` is the way to go.
+This is different from `git reset` which deletes commits from a certain point forward.  Deleting commits on our local repo does not fix our GitHub project, as those commits are already saved, and pushing up a local repo with missing commits will cause merge issues.  For anything that has been pushed up to a public branch, `git revert` is the way to go.
 
 ## Github with Friends
 
@@ -102,6 +116,12 @@ Once they've accepted your invitation, they can clone or pull down the repo and 
 
 Now that we have multiple people making changes to the repo, conflicts can occur.  This happens when gits with different changes to the same file attempt to merge.  We can avoid this by making sure that collaborators are not working on the same file at the same time (or by using better methods discussed below).
 
+One thing we should always do is protect the master main branch using branch protections rules.  Navigate to setting, select branches from the left sidebar, and add a protection rule.
+
+![](./images/git9.png)
+
+Select the option to require pull request reviews to ensure that collaborators cannot push to master/main.
+
 ### Merge Conflicts
 
 We most often run into conflicts when we try to push changes in a file to our remote repo, but there have already been changes made to that file by another coder.  Git tells us that we cannot push our changes because the remote has changes that we do not have locally.  How do we fix this?
@@ -116,7 +136,11 @@ As we saw in our example, everyone working together on one project leads to prob
 
 	git checkout -b <branch name>
 	
-This creates a new branch and switches your local repo to this new branch.  While  checked out out to this branch, make your changes, and when you push, it will push your git to your branch on GitHub.
+What does branching actually do?  What it really does is create a 'new' git project with a certain set of commits.  Those commits are everything that existed on the main branch before the new one was created.
+
+![](https://git-scm.com/book/en/v2/images/basic-branching-6.png)
+	
+Once we've create this new branch and switched our local repo to this new branch, we can make new commits that won't exist on the main branch.  While  checked out out to this branch, we make our changes, and when we push, those new commits will be stored in GitHub and connected to this branch.
 
 From there, we're going to create a pull request.  What this does is request a merge of this branch into the master branch, ensuring that everyone's changes are all part of the main branch of the project.
 
@@ -129,6 +153,8 @@ Once a pull request is made, we can view it to see if there are any merge confli
 ![](./images/git3.png)
 
 After pushing up changes from a branch, the branch should be deleted, and the merge version of master should be pulled down.  From there, the coder should create a new branch off master for their next feature.
+
+![](https://git-scm.com/book/en/v2/images/basic-merging-2.png)
 
 Let's take a look at a pull request with a merge conflict.
 
@@ -144,9 +170,9 @@ Select the pull request you want to revert, and click the revert button.
 
 This will create a new pull request that will undo the previous one.  Once that's merged, you can pull down and be back to where you were.
 
-### What About the Work I've done Since Then?
+### Fixing other issues
 
-What if you've done a significant amount of work since the faulty commit?  Are you to lose this work?  The easiest thing to do, is switch to another branch and push up your work.  Make the corrections you need to on your master branch, then create a pull request from the branch you were working on before.
+There's lots of ways that a group project git can go bad, and so there are lots of ways to fix it.  It often involves pushing your work up to a seperate branch to save it, reverting the master/main branch, then bringing them all up together.  Reverting much be done one at a time though, and the commits from each need to be reconciled.  We can also check out a new branch to a previous commit, make our changes, and push up that branch and merge.
 
 ### Cut and Run
 
